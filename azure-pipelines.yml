@@ -1,0 +1,29 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - checkout: self
+
+  - script: |
+      mkdir -p ~/.ssh
+      echo "$(GITHUB_DEPLOY_KEY)" > ~/.ssh/id_rsa
+      chmod 600 ~/.ssh/id_rsa
+      ssh-keyscan github.com >> ~/.ssh/known_hosts
+    displayName: 'Setup SSH for GitHub'
+
+  - script: |
+      git config --global user.name "Azure DevOps"
+      git config --global user.email "bit-midar-dev@openwt.com"
+      git remote add github git@github.com:m-gl/test-sync-target.git
+      git push -f github main
+    displayName: 'Sync to GitHub'
