@@ -30,5 +30,5 @@ steps:
       git remote add github git@github.com:m-gl/test-sync-target.git
       git remote -v
       echo "Pushing"
-      git push github main
+      git push github
     displayName: 'Sync to GitHub'
