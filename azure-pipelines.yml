@@ -23,6 +23,9 @@ steps:
 
   - script: |
       echo "Setting up the user"
+      git branch
+      git status
+      git remote -v
       git config --global user.name "Azure DevOps"
       git config --global user.email "bit-midar-dev@openwt.com"
       git remote add github git@github.com:m-gl/test-sync-target.git
