@@ -11,11 +11,17 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  GITHUB_DEPLOY_KEY_TEST: $(GITHUB_DEPLOY_KEY_TEST)  # Secret variable
+
+
 steps:
   - checkout: self
 
   - script: |
       mkdir -p ~/.ssh
+      echo "$GITHUB_DEPLOY_KEY_TEST"
+      echo "$(GITHUB_DEPLOY_KEY_TEST)"
       echo "$(GITHUB_DEPLOY_KEY_TEST)" > ~/.ssh/id_rsa
       cat ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
