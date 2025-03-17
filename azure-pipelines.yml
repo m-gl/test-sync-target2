@@ -22,8 +22,10 @@ steps:
     displayName: 'Setup SSH for GitHub'
 
   - script: |
+      echo "Setting up the user"
       git config --global user.name "Azure DevOps"
       git config --global user.email "bit-midar-dev@openwt.com"
       git remote add github git@github.com:m-gl/test-sync-target.git
-      git push -f github main
+      echo "Pushing"
+      git push github main
     displayName: 'Sync to GitHub'
