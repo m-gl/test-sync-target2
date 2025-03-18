@@ -17,7 +17,15 @@ variables:
 steps:
   - checkout: self
 
+  - task: DownloadSecureFile@1
+    name: test-sync
+    displayName: 'Download CA certificate'
+    inputs:
+      secureFile: 'id_rsa'
+
   - script: |
+
+      echo Installing $(test-sync.secureFilePath) to the trusted CA directory...
       mkdir -p ~/.ssh
       echo "$GITHUB_DEPLOY_KEY_TEST"
       echo "$(GITHUB_DEPLOY_KEY_TEST)"
