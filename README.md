@@ -4,7 +4,7 @@ This is to test the synchronization between Azure and Github repos.
 # Getting Started
 - store the deploy key
 - set up the job 
-- ensure tags are pushed
+- ensure tags are pushed (testing)
 
 # Build and Test
 TODO: Describe and show how to build your code and run the tests. 
