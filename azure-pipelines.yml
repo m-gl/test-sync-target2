@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   branches:
     include:
@@ -11,27 +6,18 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-variables:
-- group: GitHubSync
-
 steps:
   - checkout: self
 
   - task: DownloadSecureFile@1
     name: testSync
-    displayName: 'Download CA certificate'
+    displayName: 'Download the Deploy Key'
     inputs:
       secureFile: 'test-sync'
 
   - script: |
-
-      echo Installing $(testSync.secureFilePath) to the trusted CA directory...
-      cat $(testSync.secureFilePath)
       mkdir -p ~/.ssh
       cp $(testSync.secureFilePath) ~/.ssh/id_rsa 
-      echo "$GITHUB_DEPLOY_KEY_TEST"
-      # echo "$(GITHUB_DEPLOY_KEY_TEST)"
-      # echo "$(GITHUB_DEPLOY_KEY_TEST)" > ~/.ssh/id_rsa
       cat ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
       ssh-keyscan github.com >> ~/.ssh/known_hosts
