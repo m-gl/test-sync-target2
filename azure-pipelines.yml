@@ -14,25 +14,21 @@ steps:
     name: testSync
     displayName: 'Download the Deploy Key'
     inputs:
-      secureFile: 'test-sync'
+      secureFile: 'github-deploy-private-key'
 
   - script: |
       mkdir -p ~/.ssh
-      cp $(testSync.secureFilePath) ~/.ssh/id_rsa 
+      cp $(github-deploy-private-key.secureFilePath) ~/.ssh/id_rsa 
       cat ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
       ssh-keyscan github.com >> ~/.ssh/known_hosts
     displayName: 'Setup SSH for GitHub'
 
   - script: |
-      echo "Setting up the user"
       git checkout main
-      git branch
-      git status
       git config --global user.name "Azure DevOps"
       git config --global user.email "bit-midar-dev@openwt.com"
       git remote add github git@github.com:m-gl/test-sync-target2.git
-      git remote -v
       echo "Fetching latest changes from GitHub"
       git fetch github main
       echo "Pushing"
