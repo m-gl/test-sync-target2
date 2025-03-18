@@ -6,25 +6,43 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-  - checkout: self
-    fetchDepth: 0  # ensure branches are available
 
-  - task: DownloadSecureFile@1
-    name: gitHubDeployKey
-    displayName: 'Download the Deploy Key'
-    inputs:
-      secureFile: 'github-deploy-private-key'
 
-  - script: |
-      mkdir -p ~/.ssh
-      cp $(gitHubDeployKey.secureFilePath) ~/.ssh/id_rsa 
-      chmod 600 ~/.ssh/id_rsa
-      ssh-keyscan github.com >> ~/.ssh/known_hosts
-    displayName: 'Setup SSH for GitHub'
+stages:
+- stage: Build
+  displayName: "Build Stage"
+  jobs:
+  - job: BuildJob
+    displayName: "Build Job"
+    steps:
+    - script: echo "Building..."
+      displayName: "Building"
 
-  - script: |
-      git checkout main
-      git remote add github git@github.com:m-gl/test-sync-target2.git
-      git push github HEAD:main --tags
-    displayName: 'Sync to GitHub'
+- stage: Sync
+  displayName: "Sync to GitHub"
+  dependsOn: Build
+  jobs:
+  - job: SyncJob
+    displayName: "Sync Repository to GitHub"
+    steps:
+      - checkout: self
+        fetchDepth: 0  # ensure branches are available
+
+      - task: DownloadSecureFile@1
+        name: gitHubDeployKey
+        displayName: 'Download the Deploy Key'
+        inputs:
+          secureFile: 'github-deploy-private-key'
+
+      - script: |
+          mkdir -p ~/.ssh
+          cp $(gitHubDeployKey.secureFilePath) ~/.ssh/id_rsa 
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+        displayName: 'Setup SSH for GitHub'
+
+      - script: |
+          git checkout main
+          git remote add github git@github.com:m-gl/test-sync-target2.git
+          git push github HEAD:main --tags
+        displayName: 'Sync to GitHub'
