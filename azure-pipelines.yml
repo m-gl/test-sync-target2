@@ -31,6 +31,8 @@ steps:
       git config --global user.email "bit-midar-dev@openwt.com"
       git remote add github git@github.com:m-gl/test-sync-target2.git
       git remote -v
+      echo "Fetching latest changes from GitHub"
+      git fetch github main
       echo "Pushing"
       git push github HEAD:main
     displayName: 'Sync to GitHub'
