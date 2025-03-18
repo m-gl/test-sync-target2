@@ -26,9 +26,6 @@ steps:
 
   - script: |
       git checkout main
-      git config --global user.name "Azure DevOps"
-      git config --global user.email "bit-midar-dev@openwt.com"
       git remote add github git@github.com:m-gl/test-sync-target2.git
-      echo "Pushing"
       git push github HEAD:main
     displayName: 'Sync to GitHub'
